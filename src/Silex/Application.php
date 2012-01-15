@@ -30,6 +30,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpFoundation\OutputStream\FilePointerOutputStream;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -96,6 +97,11 @@ class Application extends \Pimple implements HttpKernelInterface, EventSubscribe
 
         $this['kernel'] = $this->share(function () use ($app) {
             return new HttpKernel($app['dispatcher'], $app['resolver']);
+        });
+
+        $this['kernel.output_stream'] = $this->share(function () use ($app) {
+            $fp = fopen('php://output', 'w');
+            return new FilePointerOutputStream($fp);
         });
 
         $this['request_context'] = $this->share(function () use ($app) {
@@ -442,6 +448,11 @@ class Application extends \Pimple implements HttpKernelInterface, EventSubscribe
     {
         if (HttpKernelInterface::MASTER_REQUEST === $event->getRequestType()) {
             $this['dispatcher']->dispatch(SilexEvents::AFTER, $event);
+
+            $response = $event->getResponse();
+            if ($response instanceof StreamedResponse) {
+                $response->setOutputStream($this['kernel.output_stream']);
+            }
         }
     }
 
