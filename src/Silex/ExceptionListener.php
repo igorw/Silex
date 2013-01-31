@@ -17,11 +17,11 @@ use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
- * Defaults exception handler.
+ * Default exception listener if no user-provided ones match.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ExceptionHandler implements EventSubscriberInterface
+class ExceptionListener implements EventSubscriberInterface
 {
     protected $debug;
     protected $enabled;
@@ -37,7 +37,7 @@ class ExceptionHandler implements EventSubscriberInterface
         $this->enabled = false;
     }
 
-    public function onSilexError(GetResponseForExceptionEvent $event)
+    public function onKernelException(GetResponseForExceptionEvent $event)
     {
         if (!$this->enabled) {
             return;
@@ -53,6 +53,6 @@ class ExceptionHandler implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(KernelEvents::EXCEPTION => array('onSilexError', -255));
+        return array(KernelEvents::EXCEPTION => array('onKernelException', -255));
     }
 }

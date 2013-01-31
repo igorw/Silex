@@ -102,7 +102,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function testMissingRoute()
     {
         $app = new Application();
-        $app['exception_handler']->disable();
+        $app['exception_listener']->disable();
 
         $request = Request::create('/baz');
         $app->handle($request);

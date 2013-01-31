@@ -94,7 +94,7 @@ class SessionServiceProviderTest extends WebTestCase
         });
 
         $app['debug'] = true;
-        $app['exception_handler']->disable();
+        $app['exception_listener']->disable();
 
         $client = new Client($app);
 

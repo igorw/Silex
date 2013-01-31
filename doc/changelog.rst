@@ -1,6 +1,9 @@
 Changelog
 =========
 
+* **2013-01-31**: The ``exception_handler`` service has been renamed to
+  ``exception_listener``.
+
 * **2012-11-05**: Filters have been renamed to application middlewares in the
   documentation.
 

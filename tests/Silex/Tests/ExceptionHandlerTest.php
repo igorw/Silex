@@ -108,7 +108,7 @@ class ExceptionHandlerTest extends \PHPUnit_Framework_TestCase
     public function testNoExceptionHandler()
     {
         $app = new Application();
-        $app['exception_handler']->disable();
+        $app['exception_listener']->disable();
 
         $app->match('/foo', function () {
             throw new \RuntimeException('foo exception');
@@ -190,7 +190,7 @@ class ExceptionHandlerTest extends \PHPUnit_Framework_TestCase
     public function testNoResponseExceptionHandler()
     {
         $app = new Application();
-        $app['exception_handler']->disable();
+        $app['exception_listener']->disable();
 
         $app->match('/foo', function () {
             throw new \RuntimeException('foo exception');
@@ -262,7 +262,7 @@ class ExceptionHandlerTest extends \PHPUnit_Framework_TestCase
             // just making sure the dispatcher gets created
         });
 
-        $app['exception_handler']->disable();
+        $app['exception_listener']->disable();
 
         try {
             $request = Request::create('/foo');

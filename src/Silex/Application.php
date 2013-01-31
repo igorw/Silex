@@ -83,9 +83,11 @@ class Application extends \Pimple implements HttpKernelInterface, TerminableInte
             return new $app['route_class']();
         };
 
-        $this['exception_handler'] = $this->share(function () use ($app) {
-            return new ExceptionHandler($app['debug']);
+        $this['exception_listener'] = $this->share(function () use ($app) {
+            return new ExceptionListener($app['debug']);
         });
+        // BC: to be removed before 1.0
+        $this['exception_handler'] = $this->raw('exception_listener');
 
         $this['dispatcher_class'] = 'Symfony\\Component\\EventDispatcher\\EventDispatcher';
         $this['dispatcher'] = $this->share(function () use ($app) {
@@ -96,8 +98,8 @@ class Application extends \Pimple implements HttpKernelInterface, TerminableInte
             });
             $dispatcher->addSubscriber(new RouterListener($urlMatcher, $app['request_context'], $app['logger']));
             $dispatcher->addSubscriber(new LocaleListener($app, $urlMatcher));
-            if (isset($app['exception_handler'])) {
-                $dispatcher->addSubscriber($app['exception_handler']);
+            if (isset($app['exception_listener'])) {
+                $dispatcher->addSubscriber($app['exception_listener']);
             }
             $dispatcher->addSubscriber(new ResponseListener($app['charset']));
             $dispatcher->addSubscriber(new MiddlewareListener($app));

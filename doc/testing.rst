@@ -99,7 +99,7 @@ executed before every test.
         {
             $app = require __DIR__.'/path/to/app.php';
             $app['debug'] = true;
-            $app['exception_handler']->disable();
+            $app['exception_listener']->disable();
 
             return $app;
         }
