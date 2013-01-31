@@ -19,7 +19,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Silex\Application;
 
 /**
- * Wraps exception listeners.
+ * Wraps user-provided exception listeners.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
